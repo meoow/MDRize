@@ -28,20 +28,34 @@ func parseArgs() *Opts {
 	return opts
 }
 
-func factorial(n, k int) int {
-	var nf int = 1
-	var kf int = 1
-	var nkf int = 1
-	for i := 1; i <= n; i++ {
-		nf *= i
+func combinationnum(n, k int) int {
+	if k > n {
+		return 0
 	}
-	for i := 1; i <= k; i++ {
-		kf *= i
+	comb := make([]int, k)
+	for i := range make([]struct{}, k) {
+		comb[i] = i
 	}
-	for i := 1; i <= n-k; i++ {
-		nkf *= i
+	nextComb := func(comb []int, n, k int) bool {
+		i := k - 1
+		comb[i]++
+		for i > 0 && comb[i] == n-k+1+i {
+			i--
+			comb[i]++
+		}
+		if comb[0] > n-k {
+			return false
+		}
+		for i = i + 1; i < k; i++ {
+			comb[i] = comb[i-1] + 1
+		}
+		return true
 	}
-	return nf / (kf * nkf)
+	count := 1
+	for nextComb(comb, n, k) {
+		count++
+	}
+	return count
 }
 
 func cleanTable(t *[2][3][3]int) {
@@ -68,7 +82,6 @@ func main() {
 		samplesize++
 	}
 	samplesize -= 1
-	fmt.Println(samplesize)
 	filer.Seek(0, 0)
 	fscanner = bufio.NewScanner(filer)
 	fscanner.Scan()
@@ -115,7 +128,7 @@ func main() {
 		casePortion = float64(sum) / float64(samplesize-sum)
 	}
 
-	combnum := factorial(varnum, 2)
+	combnum := combinationnum(varnum, 2)
 	//classTable := make(map[[2]int]*[3][3]bool, combnum)
 	output := make([][]byte, 0, combnum)
 	outputHeader := make([]string, 0, combnum)
