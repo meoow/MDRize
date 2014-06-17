@@ -1,15 +1,17 @@
 package main
 
-import "fmt"
-import "os"
-import "log"
-import "flag"
-import "bufio"
-import "regexp"
-import "errors"
-import "strconv"
-import "strings"
-import "unsafe"
+import (
+	"bufio"
+	"errors"
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"regexp"
+	"strconv"
+	"strings"
+	"unsafe"
+)
 
 var linesplit = regexp.MustCompile(`\s+`)
 
